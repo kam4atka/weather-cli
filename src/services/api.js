@@ -9,7 +9,7 @@ import {
 } from '../const.js';
 
 const getWeather = async (city) => {
-  const token = await getKeyValue(ENTRIES.TOKEN);
+  const token = process.env.TOKEN ?? await getKeyValue(ENTRIES.TOKEN);
 
   if (!token) {
     throw new Error(MESSAGES.TOKEN_ERROR);

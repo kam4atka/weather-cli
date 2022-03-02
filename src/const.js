@@ -1,12 +1,15 @@
 export const NAME_FILE = 'weather-data.json';
 
 export const ENTRIES = {
-  TOKEN: 'token'
+  TOKEN: 'token',
+  CITY: 'city'
 };
 
 export const MESSAGES = {
   TOKEN_SUCCESS: 'Токен сохранен',
   TOKEN_ERROR: 'Не задан ключ API. Воспользуйтесь ключем -h, чтобы узнать подробнее как добавить ключ API',
+  CITY_SUCCESS: 'Город сохранен',
+  CITY_ERROR: 'Не задан город. Воспользуйтесь ключем -h, чтобы узнать подробнее как добавить город',
   HTTP_UNAUTHORIZED: 'Доступ запрещен. Проверьте наличие и корректность ключа API',
   HTTP_NOT_FOUND: 'Сервер не найшел данные соответствующие введенным параметрам'
 };

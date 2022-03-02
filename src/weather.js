@@ -1,6 +1,6 @@
 import {getObjectOfArgs} from './helpers/args.js';
-import {printError, printHelp, printSuccess} from './services/logger.js';
-import {saveKeyValue} from './services/storage.js';
+import {printError, printHelp, printSuccess, printWeather} from './services/logger.js';
+import {getKeyValue, saveKeyValue} from './services/storage.js';
 import {MESSAGES, ENTRIES, HTTP_CODE} from './const.js';
 import {getWeather} from './services/api.js';
 
@@ -18,13 +18,29 @@ const saveToken = async (token) => {
   }
 }
 
+const saveCity = async (city) => {
+  if (!city.length) {
+    printError(MESSAGES.CITY_ERROR);
+    return;
+  }
+
+  try {
+    await saveKeyValue(ENTRIES.CITY, city);
+    printSuccess(MESSAGES.CITY_SUCCESS);
+  } catch (err) {
+    printError(err.message);
+  }
+}
+
 const getForcast = async () => {
   try {
-    const weather = await getWeather('moscow')
+    const city = process.env.CITY ?? await getKeyValue(ENTRIES.CITY);
 
-    return weather;
+    const weather = await getWeather(city);
+
+    printWeather(weather);
   } catch (err) {
-    if (!err.response.status) {
+    if (!err.response || !err.response.status) {
       return;
     }
 
@@ -46,18 +62,16 @@ const initCLI = () => {
   const args = getObjectOfArgs(process.argv);
 
   if (args.h) {
-    printHelp();
+    return printHelp();
   }
   if (args.t) {
     return saveToken(args.t);
   }
   if (args.s) {
-    return saveToken(args.t);
+    return saveCity(args.s);
   }
 
-  const weather = getForcast();
-
-  console.log(weather);
+  return getForcast();
 };
 
 export {initCLI};
